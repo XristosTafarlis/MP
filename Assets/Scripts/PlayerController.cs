@@ -167,9 +167,11 @@ public class PlayerController: NetworkBehaviour{
 			gravity = 0f;
 			moveDirection = Vector3.zero;
 			characterController.enabled = true;
+			GetComponent<Animator>().SetBool("isFlying", true);
 		}else{
 			gravity = tempGravity;
 			characterController.enabled = true;
+			GetComponent<Animator>().SetBool("isFlying", false);
 		}
 	}
 	

@@ -177,10 +177,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3803871037345777490}
   - component: {fileID: 7851050057411244097}
-  - component: {fileID: 159357772487229702}
   - component: {fileID: 3528610367046896383}
+  - component: {fileID: 159357772487229702}
+  - component: {fileID: 2031521371469764840}
   - component: {fileID: 5384770665935514096}
   - component: {fileID: -3839816587787247385}
+  - component: {fileID: 8514962537356125385}
   m_Layer: 3
   m_Name: Player3D
   m_TagString: Untagged
@@ -215,6 +217,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5594643931493565163}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!143 &3528610367046896383
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5594643931493565163}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &159357772487229702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,24 +260,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   canMove: 1
---- !u!143 &3528610367046896383
-CharacterController:
+--- !u!114 &2031521371469764840
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5594643931493565163}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6fb03a1e2b3b6d48bbc3953a391e34b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleration: 3
+  deceleration: 4
 --- !u!114 &5384770665935514096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +325,26 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!95 &8514962537356125385
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5594643931493565163}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8994d9c1a0f52284da1e1af65bc94c21, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6747764757472993129
 GameObject:
   m_ObjectHideFlags: 0
