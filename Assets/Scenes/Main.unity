@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &85625999
 Transform:
   m_ObjectHideFlags: 0
@@ -1339,7 +1339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c8e1be442857aba49b2c4f8c3c64bd0e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 961616649399720048, guid: c8e1be442857aba49b2c4f8c3c64bd0e, type: 3}
       propertyPath: m_Layer
@@ -1748,9 +1748,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 891536496}
-  - component: {fileID: 891536499}
   - component: {fileID: 891536498}
   - component: {fileID: 891536497}
+  - component: {fileID: 891536500}
   m_Layer: 0
   m_Name: NetworkingManager
   m_TagString: Untagged
@@ -1816,7 +1816,7 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &891536499
+--- !u!114 &891536500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1825,7 +1825,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 891536492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cff8c9a68bd4bab4db61c41bdf58b9fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1

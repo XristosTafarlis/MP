@@ -62,9 +62,7 @@ public class PlayerController: NetworkBehaviour{
 	}
 	
 	void Update(){
-		if(!isLocalPlayer){
-			return;
-		}
+		if(!isLocalPlayer) return;
 		
 		KeyInputs();
 		Fly();
@@ -146,7 +144,7 @@ public class PlayerController: NetworkBehaviour{
 			Invoke("SetFlyVariables", 1f);
 		}else if (isFlying && _current == 1){
 			characterController.enabled = false;
-			//Raycast stuff
+			//Raycast
 			CmdTransformPosition();
 			//_startPosition = new Vector3(transform.position.x, transform.position.y - 10f, transform.position.z);
 			_goalPosition = transform.position;
@@ -197,25 +195,21 @@ public class PlayerController: NetworkBehaviour{
 	
 	[Command]
 	void CmdTransformPosition(){
-		Debug.DrawRay(transform.position, Vector3.down * 20f, Color.red);
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
 			//We add half of the player's collider height because otherwise the center of our player will be on ground level
 			_startPosition = hit.point + new Vector3(0f, characterController.height / 2, 0f);
 		}
-		//Used to call the Target RPC below, but it was not needed.
-		//RpcDrawLine();
+		RpcDrawLine();
 	}
 	
-	//Ended up not needing this. The raycast works straight from the server side through the above command.
-	//[TargetRpc]
-	//void RpcDrawLine(){
-	//	Debug.DrawRay(transform.position, Vector3.down * 20f, Color.red);
-	//	RaycastHit hit;
-	//	if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
-	//		_startPosition = hit.point + new Vector3(0f, 1f, 0f);
-	//	}
-	//}
+	[TargetRpc]
+	void RpcDrawLine(){
+		RaycastHit hit;
+		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
+			_startPosition = hit.point + new Vector3(0f, 1f, 0f);
+		}
+	}
 	
 	[Command]
 	void CmdResize(){
