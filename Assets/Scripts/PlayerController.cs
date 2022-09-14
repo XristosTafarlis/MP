@@ -19,6 +19,7 @@ public class PlayerController: NetworkBehaviour{
 	//My variables & references
 	[Space(10)]
 	Camera workingCamera;
+	Animator animator;
 	bool isFat;
 	bool isLocked;
 	bool tpcam;
@@ -44,6 +45,7 @@ public class PlayerController: NetworkBehaviour{
 	
 	void Start(){
 		characterController = GetComponent<CharacterController>();
+		animator = GetComponent<Animator>();
 		tempGravity = gravity;
 		
 		Cursor.lockState = CursorLockMode.Locked;
@@ -80,6 +82,7 @@ public class PlayerController: NetworkBehaviour{
 			bool isRunning = Input.GetKey(KeyCode.LeftShift);
 			float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
 			float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
+			
 			float movementDirectionY = moveDirection.y;
 			moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 			
@@ -147,7 +150,7 @@ public class PlayerController: NetworkBehaviour{
 			//Raycast
 			CmdTransformPosition();
 			//_startPosition = new Vector3(transform.position.x, transform.position.y - 10f, transform.position.z);
-			_goalPosition = transform.position;
+			_goalPosition = transform.position; //Need to be revesed, so this is actualy the starting position
 			_target = 0;
 			moveDirection.y = 0;
 			isFlying = false;
@@ -165,11 +168,11 @@ public class PlayerController: NetworkBehaviour{
 			gravity = 0f;
 			moveDirection = Vector3.zero;
 			characterController.enabled = true;
-			GetComponent<Animator>().SetBool("isFlying", true);
+			GetComponent<Animator>().SetBool("IsFlying", true);
 		}else{
 			gravity = tempGravity;
 			characterController.enabled = true;
-			GetComponent<Animator>().SetBool("isFlying", false);
+			GetComponent<Animator>().SetBool("IsFlying", false);
 		}
 	}
 	
@@ -195,19 +198,14 @@ public class PlayerController: NetworkBehaviour{
 	
 	[Command]
 	void CmdTransformPosition(){
-		RaycastHit hit;
-		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
-			//We add half of the player's collider height because otherwise the center of our player will be on ground level
-			_startPosition = hit.point + new Vector3(0f, characterController.height / 2, 0f);
-		}
-		RpcDrawLine();
+		RpcCastLine();
 	}
 	
 	[TargetRpc]
-	void RpcDrawLine(){
+	void RpcCastLine(){
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
-			_startPosition = hit.point + new Vector3(0f, 1f, 0f);
+			_startPosition = hit.point /*+ new Vector3(0f, 1f, 0f)*/;
 		}
 	}
 	
@@ -217,7 +215,7 @@ public class PlayerController: NetworkBehaviour{
 			SV_size = new Vector3 (5, 5, 5);
 			isFat = true;
 		}else{
-			SV_size = new Vector3 (1, 1, 1);
+			SV_size = new Vector3 (2, 2, 2);
 			isFat = false;
 		}
 		RpcChangeSize(SV_size);
