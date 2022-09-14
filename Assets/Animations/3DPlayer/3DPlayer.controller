@@ -18,27 +18,99 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3ac0001832632ff45acfae7acb557948, type: 2}
-    m_Threshold: 0.5
-    m_Position: {x: 0, y: 0}
+    m_Threshold: 0.060606062
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Vel_X
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: d7a8810b8be655a40878318cf734d1de, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
+    m_Threshold: 0.121212125
+    m_Position: {x: 0, y: 2}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Vel_X
     m_Mirror: 0
-  m_BlendParameter: Speed
-  m_BlendParameterY: Vel_X
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7d5cc1c9bdf2ff74a87c0224ae16061b, type: 2}
+    m_Threshold: 0.18181819
+    m_Position: {x: 0, y: -1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 2379d630b35bc2b4fa146ee51bffee78, type: 2}
+    m_Threshold: 0.24242425
+    m_Position: {x: -1, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: c6c734b8c7bffdd4e91c4fa3b4c5b64b, type: 2}
+    m_Threshold: 0.3030303
+    m_Position: {x: 1, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 852e6c330a544bd43826f9aa81e5bb8a, type: 2}
+    m_Threshold: 0.36363637
+    m_Position: {x: 2, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a1ed0ff3b1931884cb6a50358c5c385f, type: 2}
+    m_Threshold: 0.42424244
+    m_Position: {x: -2, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 5f8a7f6b7ec62974487359b460eb412f, type: 2}
+    m_Threshold: 0.4848485
+    m_Position: {x: -2, y: 2}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 32c0afa5e8420f84c895b5edee56419c, type: 2}
+    m_Threshold: 0.54545456
+    m_Position: {x: 2, y: 2}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: cb85d32b93b165649a1fce4897a599ea, type: 2}
+    m_Threshold: 0.6060606
+    m_Position: {x: -2, y: -1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: b1ba33d558539cc47938736b006c17e1, type: 2}
+    m_Threshold: 0.6666667
+    m_Position: {x: 2, y: -1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: vel_X
+    m_Mirror: 0
+  m_BlendParameter: vel_X
+  m_BlendParameterY: vel_Z
   m_MinThreshold: 0
-  m_MaxThreshold: 1
+  m_MaxThreshold: 0.6666667
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 2
 --- !u!1107 &-6971878698272782351
 AnimatorStateMachine:
   serializedVersion: 6
@@ -85,13 +157,13 @@ AnimatorController:
   m_Name: 3DPlayer
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Vel_X
+  - m_Name: vel_X
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Vel_Z
+  - m_Name: vel_Z
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -99,12 +171,6 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: IsFlying
     m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: Speed
-    m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

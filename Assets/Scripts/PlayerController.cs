@@ -7,9 +7,9 @@ using Mirror;
 public class PlayerController: NetworkBehaviour{
 	//Player Controller variables & references
 	[Header("References")]
-	[SerializeField] float walkingSpeed = 7.5f;
+	public float walkingSpeed = 7.5f;
 	[SerializeField] float runningSpeed = 11.5f;
-	[SerializeField] float jumpSpeed = 8.0f;
+	[SerializeField] float jumpHeight = 3.0f;
 	[SerializeField] float gravity = 20.0f;
 	[SerializeField] Camera FPCamera;
 	[SerializeField] Camera TPCamera;
@@ -80,17 +80,18 @@ public class PlayerController: NetworkBehaviour{
 			
 			// Press Left Shift to run
 			bool isRunning = Input.GetKey(KeyCode.LeftShift);
-			float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
-			float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
+			float axisX;
+			float axisY;
 			
-			float movementDirectionY = moveDirection.y;
-			moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-			
-			if (Input.GetButton("Jump") && canMove && characterController.isGrounded){
-				moveDirection.y = jumpSpeed;
+			if (canMove){
+				axisY = Input.GetAxisRaw("Horizontal");
+				axisX = Input.GetAxisRaw("Vertical");
 			}else{
-				moveDirection.y = movementDirectionY;
+				axisX = axisY = 0f;
 			}
+			
+			moveDirection = (forward * axisX) + (right * axisY);
+			moveDirection.Normalize();
 			
 			// Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
 			// when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
@@ -100,7 +101,10 @@ public class PlayerController: NetworkBehaviour{
 			}
 			
 			// Move the controller
-			characterController.Move(moveDirection * Time.deltaTime);
+			if(isRunning)
+				characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+			else
+				characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
 		}
 		
 		// Player and Camera rotation
