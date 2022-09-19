@@ -13,37 +13,56 @@ public class CharacterSelection : NetworkBehaviour{
 	[SerializeField] Material [] hairStyle3Materials;
 	SkinnedMeshRenderer hairStyle3SkinnedMeshRenderer;
 
-	[Header("Face")]
+	[Header("Face and Glasses")]
 	[SerializeField] GameObject face;
 	[SerializeField] Material [] faceMaterials;
 	SkinnedMeshRenderer faceSkinnedMeshRenderer;
+	
+	[SerializeField] GameObject [] glassesStyles;
+	//For materials we use the same as the Tie and Bowtie materials below
+	SkinnedMeshRenderer glasses1SkinnedMeshRenderer;
+	SkinnedMeshRenderer glasses2SkinnedMeshRenderer;
+	SkinnedMeshRenderer glasses3SkinnedMeshRenderer;
 	
 	[Header("Shirt and Pants")]
 	[SerializeField] GameObject [] shirtAndPantStyles;
 	[SerializeField] Material [] shirtMaterials;
 	[SerializeField] Material [] pantsMaterials;
-	[SerializeField] Material [] tieBowtieMaterials;
+	[SerializeField] Material [] tieBowtieGlassesMaterials;
 	SkinnedMeshRenderer shirtAndPantStyle1SkinnedMeshRenderer;
 	SkinnedMeshRenderer shirtAndPantStyle2SkinnedMeshRenderer;
 	SkinnedMeshRenderer shirtAndPantStyle3SkinnedMeshRenderer;
 	SkinnedMeshRenderer shirtAndPantStyle4SkinnedMeshRenderer;
 	
+	[Header("Shoes")]
+	[SerializeField] GameObject [] shoesStyles;
+	[SerializeField] Material [] buisnessShoesMaterials; 
+	[SerializeField] Material [] casualShoesMaterials; 
+	SkinnedMeshRenderer businessStyleSkinnedMeshRenderer;
+	SkinnedMeshRenderer casualStyleSkinnedMeshRenderer;
+	
 	void Start(){
 		if(!isLocalPlayer) return;
+		//Hair
 		hairStyle1SkinnedMeshRenderer = hairStyles[0].GetComponent<SkinnedMeshRenderer>();
 		hairStyle2SkinnedMeshRenderer = hairStyles[1].GetComponent<SkinnedMeshRenderer>();
 		hairStyle3SkinnedMeshRenderer = hairStyles[2].GetComponent<SkinnedMeshRenderer>();
 		
+		//Face and glasses
 		faceSkinnedMeshRenderer = face.GetComponent<SkinnedMeshRenderer>();
+		glasses1SkinnedMeshRenderer = glassesStyles[0].GetComponent<SkinnedMeshRenderer>();
+		glasses2SkinnedMeshRenderer = glassesStyles[1].GetComponent<SkinnedMeshRenderer>();
+		glasses3SkinnedMeshRenderer = glassesStyles[2].GetComponent<SkinnedMeshRenderer>();
 		
+		//Shirt and pants
 		shirtAndPantStyle1SkinnedMeshRenderer = shirtAndPantStyles[0].GetComponent<SkinnedMeshRenderer>();
 		shirtAndPantStyle2SkinnedMeshRenderer = shirtAndPantStyles[1].GetComponent<SkinnedMeshRenderer>();
 		shirtAndPantStyle3SkinnedMeshRenderer = shirtAndPantStyles[2].GetComponent<SkinnedMeshRenderer>();
 		shirtAndPantStyle4SkinnedMeshRenderer = shirtAndPantStyles[3].GetComponent<SkinnedMeshRenderer>();
-		Debug.Log("Style 1 : " + shirtAndPantStyle1SkinnedMeshRenderer.materials.Length);
-		Debug.Log("Style 2 : " + shirtAndPantStyle2SkinnedMeshRenderer.materials.Length);
-		Debug.Log("Style 3 : " + shirtAndPantStyle3SkinnedMeshRenderer.materials.Length);
-		Debug.Log("Style 4 : " + shirtAndPantStyle4SkinnedMeshRenderer.materials.Length);
+		
+		//Shoes
+		businessStyleSkinnedMeshRenderer = shoesStyles[0].GetComponent<SkinnedMeshRenderer>();
+		casualStyleSkinnedMeshRenderer = shoesStyles[1].GetComponent<SkinnedMeshRenderer>();
 	}
 	
 	void Update(){
@@ -101,12 +120,79 @@ public class CharacterSelection : NetworkBehaviour{
 	}
 	#endregion
 	
-	#region Face
+	#region Face and Glasses
 	public void ChangeFaceStyle(int value){
 		if(value == 0) faceSkinnedMeshRenderer.material = faceMaterials[0];
 		if(value == 1) faceSkinnedMeshRenderer.material = faceMaterials[1];
 		if(value == 2) faceSkinnedMeshRenderer.material = faceMaterials[2];
 		if(value == 3) faceSkinnedMeshRenderer.material = faceMaterials[3];
+	}
+	
+	public void ChangeGlassesStyle(int value){
+		foreach (GameObject model in glassesStyles){
+			model.SetActive(false);
+		}
+		if(value == 0){
+			return;
+		}else if(value == 1){
+			glassesStyles[0].SetActive(true);
+		}else if(value == 2){
+			glassesStyles[1].SetActive(true);
+		}else if(value == 3){
+			glassesStyles[2].SetActive(true);
+		}
+	}
+	
+	public void ChangeGlassesColor(int value){
+		if(value == 0){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[0];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[0];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[0];
+		}else if(value == 1){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[1];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[1];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[1];
+		}else if(value == 2){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[2];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[2];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[2];
+		}else if(value == 3){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[3];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[3];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[3];
+		}else if(value == 4){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[4];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[4];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[4];
+		}else if(value == 5){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[5];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[5];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[5];
+		}else if(value == 6){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[6];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[6];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[6];
+		}else if(value == 7){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[7];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[7];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[7];
+		}else if(value == 8){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[8];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[8];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[8];
+		}else if(value == 9){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[9];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[9];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[9];
+		}else if(value == 10){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[10];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[10];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[10];
+		}else if(value == 11){
+			glasses1SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[11];
+			glasses2SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[11];
+			glasses3SkinnedMeshRenderer.material = tieBowtieGlassesMaterials[11];
+		}
 	}
 	#endregion
 	
@@ -221,57 +307,92 @@ public class CharacterSelection : NetworkBehaviour{
 		Material [] materials3 = shirtAndPantStyle3SkinnedMeshRenderer.materials;
 		Material [] materials4 = shirtAndPantStyle4SkinnedMeshRenderer.materials;
 		if(value == 0){
-			materials2[2] = tieBowtieMaterials[0];
-			materials3[2] = tieBowtieMaterials[0];
-			materials4[2] = tieBowtieMaterials[0];
+			materials2[2] = tieBowtieGlassesMaterials[0];
+			materials3[2] = tieBowtieGlassesMaterials[0];
+			materials4[2] = tieBowtieGlassesMaterials[0];
 		}else if(value == 1){
-			materials2[2] = tieBowtieMaterials[1];
-			materials3[2] = tieBowtieMaterials[1];
-			materials4[2] = tieBowtieMaterials[1];
+			materials2[2] = tieBowtieGlassesMaterials[1];
+			materials3[2] = tieBowtieGlassesMaterials[1];
+			materials4[2] = tieBowtieGlassesMaterials[1];
 		}else if(value == 2){
-			materials2[2] = tieBowtieMaterials[2];
-			materials3[2] = tieBowtieMaterials[2];
-			materials4[2] = tieBowtieMaterials[2];
+			materials2[2] = tieBowtieGlassesMaterials[2];
+			materials3[2] = tieBowtieGlassesMaterials[2];
+			materials4[2] = tieBowtieGlassesMaterials[2];
 		}else if(value == 3){
-			materials2[2] = tieBowtieMaterials[3];
-			materials3[2] = tieBowtieMaterials[3];
-			materials4[2] = tieBowtieMaterials[3];
+			materials2[2] = tieBowtieGlassesMaterials[3];
+			materials3[2] = tieBowtieGlassesMaterials[3];
+			materials4[2] = tieBowtieGlassesMaterials[3];
 		}else if(value == 4){
-			materials2[2] = tieBowtieMaterials[4];
-			materials3[2] = tieBowtieMaterials[4];
-			materials4[2] = tieBowtieMaterials[4];
+			materials2[2] = tieBowtieGlassesMaterials[4];
+			materials3[2] = tieBowtieGlassesMaterials[4];
+			materials4[2] = tieBowtieGlassesMaterials[4];
 		}else if(value == 5){
-			materials2[2] = tieBowtieMaterials[5];
-			materials3[2] = tieBowtieMaterials[5];
-			materials4[2] = tieBowtieMaterials[5];
+			materials2[2] = tieBowtieGlassesMaterials[5];
+			materials3[2] = tieBowtieGlassesMaterials[5];
+			materials4[2] = tieBowtieGlassesMaterials[5];
 		}else if(value == 6){
-			materials2[2] = tieBowtieMaterials[6];
-			materials3[2] = tieBowtieMaterials[6];
-			materials4[2] = tieBowtieMaterials[6];
+			materials2[2] = tieBowtieGlassesMaterials[6];
+			materials3[2] = tieBowtieGlassesMaterials[6];
+			materials4[2] = tieBowtieGlassesMaterials[6];
 		}else if(value == 7){
-			materials2[2] = tieBowtieMaterials[7];
-			materials3[2] = tieBowtieMaterials[7];
-			materials4[2] = tieBowtieMaterials[7];
+			materials2[2] = tieBowtieGlassesMaterials[7];
+			materials3[2] = tieBowtieGlassesMaterials[7];
+			materials4[2] = tieBowtieGlassesMaterials[7];
 		}else if(value == 8){
-			materials2[2] = tieBowtieMaterials[8];
-			materials3[2] = tieBowtieMaterials[8];
-			materials4[2] = tieBowtieMaterials[8];
+			materials2[2] = tieBowtieGlassesMaterials[8];
+			materials3[2] = tieBowtieGlassesMaterials[8];
+			materials4[2] = tieBowtieGlassesMaterials[8];
 		}else if(value == 9){
-			materials2[2] = tieBowtieMaterials[9];
-			materials3[2] = tieBowtieMaterials[9];
-			materials4[2] = tieBowtieMaterials[9];
+			materials2[2] = tieBowtieGlassesMaterials[9];
+			materials3[2] = tieBowtieGlassesMaterials[9];
+			materials4[2] = tieBowtieGlassesMaterials[9];
 		}else if(value == 10){
-			materials2[2] = tieBowtieMaterials[10];
-			materials3[2] = tieBowtieMaterials[10];
-			materials4[2] = tieBowtieMaterials[10];
+			materials2[2] = tieBowtieGlassesMaterials[10];
+			materials3[2] = tieBowtieGlassesMaterials[10];
+			materials4[2] = tieBowtieGlassesMaterials[10];
 		}else if(value == 11){
-			materials2[2] = tieBowtieMaterials[11];
-			materials3[2] = tieBowtieMaterials[11];
-			materials4[2] = tieBowtieMaterials[11];
+			materials2[2] = tieBowtieGlassesMaterials[11];
+			materials3[2] = tieBowtieGlassesMaterials[11];
+			materials4[2] = tieBowtieGlassesMaterials[11];
 		}
 		shirtAndPantStyle2SkinnedMeshRenderer.materials = materials2;
 		shirtAndPantStyle3SkinnedMeshRenderer.materials = materials3;
 		shirtAndPantStyle4SkinnedMeshRenderer.materials = materials4;
+	}
+	#endregion
+	
+	#region Shoes
+	public void ChangeShoesStyle(int value){
+		foreach (GameObject model in shoesStyles){
+			model.SetActive(false);
+		}
+		if(value == 0){
+			shoesStyles[0].SetActive(true);
+		}else if(value == 1){
+			shoesStyles[1].SetActive(true);
+		}
+	}
+	
+	public void ChangeBuisnessShoesColor(int value){
+		if(value == 0){
+			businessStyleSkinnedMeshRenderer.material = buisnessShoesMaterials[0];
+		}else if(value == 1){
+			businessStyleSkinnedMeshRenderer.material = buisnessShoesMaterials[1];
+		}else if(value == 2){
+			businessStyleSkinnedMeshRenderer.material = buisnessShoesMaterials[2];
+		}
+	}
+	
+	public void ChangeCasualShoesColor(int value){
+		if(value == 0){
+			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[0];
+		}else if(value == 1){
+			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[1];
+		}else if(value == 2){
+			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[2];
+		}else if(value == 3){
+			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[3];
+		}
 	}
 	#endregion
 	

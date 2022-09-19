@@ -19,6 +19,12 @@ public class WalkAnimationsController : NetworkBehaviour{
 	}
 	
 	void Update() {
+		if(playerController.canMove == false){
+			animator.SetFloat("vel_X", 0, 1f, 0.1f);
+			animator.SetFloat("vel_Z", 0, 1f, 0.1f);
+			return;
+		}
+		
 		vel_X = Input.GetAxis("Horizontal");
 		vel_Z = Input.GetAxis("Vertical");
 		

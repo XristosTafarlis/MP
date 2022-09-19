@@ -9,10 +9,12 @@ public class PlayerController: NetworkBehaviour{
 	[Header("References")]
 	public float walkingSpeed = 7.5f;
 	[SerializeField] float runningSpeed = 11.5f;
-	//[SerializeField] float jumpHeight = 3.0f;
+//	[SerializeField] float jumpHeight = 3.0f;
 	[SerializeField] float gravity = 20.0f;
-	[SerializeField] Camera FPCamera;
-	[SerializeField] Camera TPCamera;
+	[SerializeField] Camera FirstPersonCamera;
+	[SerializeField] Camera ThirdPersonCamera;
+	[SerializeField] Camera TopCamera;
+	[SerializeField] Camera BotCamera;
 	[SerializeField] float lookSpeed = 2.0f;
 	float lookXLimit = 90.0f;
 	
@@ -22,7 +24,15 @@ public class PlayerController: NetworkBehaviour{
 	Animator animator;
 	bool isFat;
 	bool isLocked;
-	bool tpcam;
+	
+	public enum CameraState{
+		FirstPersonCamera,
+		ThirdPesonCamera,
+		TopCamera,
+		BotCamera
+	};
+	
+	[SerializeField] CameraState myCamera;
 	
 	//Fly variables
 	[Space(20)]
@@ -53,14 +63,18 @@ public class PlayerController: NetworkBehaviour{
 		isLocked = true;
 		
 		if(!isLocalPlayer){
-			FPCamera.gameObject.SetActive(false);
-			TPCamera.gameObject.SetActive(false);
+			FirstPersonCamera.gameObject.SetActive(false);
+			ThirdPersonCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(false);
+			BotCamera.gameObject.SetActive(false);
 		}else{
-			FPCamera.gameObject.SetActive(true);
-			TPCamera.gameObject.SetActive(false);
+			FirstPersonCamera.gameObject.SetActive(true);
+			ThirdPersonCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(false);
+			BotCamera.gameObject.SetActive(false);
 		}
-		
-		workingCamera = FPCamera;
+		myCamera = CameraState.FirstPersonCamera;
+		workingCamera = FirstPersonCamera;
 	}
 	
 	void Update(){
@@ -186,18 +200,50 @@ public class PlayerController: NetworkBehaviour{
 	}
 	
 	void CammeraChange(){
-		if (tpcam){
-			tpcam = false;
-			workingCamera = FPCamera;
-			FPCamera.gameObject.SetActive(true);
-			TPCamera.gameObject.SetActive(false);
-			lookXLimit = 90f;
-		} else {
-			tpcam = true;
-			workingCamera = TPCamera;
-			FPCamera.gameObject.SetActive(false);
-			TPCamera.gameObject.SetActive(true);
+		if (myCamera == CameraState.FirstPersonCamera){
+			myCamera = CameraState.ThirdPesonCamera;
+			workingCamera = ThirdPersonCamera;
+			FirstPersonCamera.gameObject.SetActive(false);
+			ThirdPersonCamera.gameObject.SetActive(true);
+			TopCamera.gameObject.SetActive(false);
+			BotCamera.gameObject.SetActive(false);
 			lookXLimit = 40f;
+		}
+		else if (myCamera == CameraState.ThirdPesonCamera){
+			myCamera = CameraState.TopCamera;
+			canMove = false;
+			workingCamera = FirstPersonCamera;
+			FirstPersonCamera.gameObject.SetActive(false);
+			ThirdPersonCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(true);
+			BotCamera.gameObject.SetActive(false);
+			lookXLimit = 90f;
+			
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+			isLocked = false;
+		}
+		else if (myCamera == CameraState.TopCamera){
+			myCamera = CameraState.BotCamera;
+			canMove = false;
+			workingCamera = FirstPersonCamera;
+			FirstPersonCamera.gameObject.SetActive(false);
+			ThirdPersonCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(false);
+			BotCamera.gameObject.SetActive(true);
+			
+		}else if (myCamera == CameraState.BotCamera){
+			myCamera = CameraState.FirstPersonCamera;
+			canMove = true;
+			workingCamera = FirstPersonCamera;
+			FirstPersonCamera.gameObject.SetActive(true);
+			ThirdPersonCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(false);
+			BotCamera.gameObject.SetActive(false);
+			
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			isLocked = true;
 		}
 	}
 	
