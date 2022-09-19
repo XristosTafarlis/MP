@@ -9,7 +9,7 @@ public class PlayerController: NetworkBehaviour{
 	[Header("References")]
 	public float walkingSpeed = 7.5f;
 	[SerializeField] float runningSpeed = 11.5f;
-	[SerializeField] float jumpHeight = 3.0f;
+	//[SerializeField] float jumpHeight = 3.0f;
 	[SerializeField] float gravity = 20.0f;
 	[SerializeField] Camera FPCamera;
 	[SerializeField] Camera TPCamera;
@@ -108,7 +108,7 @@ public class PlayerController: NetworkBehaviour{
 		}
 		
 		// Player and Camera rotation
-		if (canMove){
+		if (canMove && isLocked){
 			rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
 			rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
 			workingCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
@@ -138,6 +138,11 @@ public class PlayerController: NetworkBehaviour{
 				Cursor.visible = false;
 				isLocked = true;
 			}
+		}
+		if(!isLocked && Input.GetMouseButtonDown(1)){
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			isLocked = true;
 		}
 	}
 	
