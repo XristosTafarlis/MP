@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Mirror;
 
 public class CharacterSelection : NetworkBehaviour{
 	[Header("Hair")]
 	[SerializeField] GameObject [] hairStyles;
+	//[SerializeField] TMP_Dropdown hairStylesDD;
+	//int hairStylesIndex;
+	//[SerializeField] Dropdown hairStylesDD;
 	[SerializeField] Material [] hairStyle1Materials;
 	SkinnedMeshRenderer hairStyle1SkinnedMeshRenderer;
 	[SerializeField] Material [] hairStyle2Materials;
@@ -67,18 +72,42 @@ public class CharacterSelection : NetworkBehaviour{
 	
 	void Update(){
 		if(!isLocalPlayer) return;
+		//Testing with buttons 1, 2 and 3
+		if(Input.GetKeyDown(KeyCode.Alpha1)){
+			CMDChangeHairStyle(0);
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha2)){
+			CMDChangeHairStyle(1);
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha3)){
+			CMDChangeHairStyle(2);
+		}
 	}
 	
 	#region Hair
 	public void ChangeHairStyle(int value){
-		foreach (GameObject model in hairStyles){
-			model.SetActive(false);
-		}
+		CMDChangeHairStyle(value);
+	}
+	
+	[Command]
+	void CMDChangeHairStyle(int value){
+		RPCChangeHairStyel(value);
+	}
+	
+	[ClientRpc]
+	void RPCChangeHairStyel(int value){
+		//if(!isLocalPlayer) return;
 		if(value == 0){
 			hairStyles[0].SetActive(true);
+			hairStyles[1].SetActive(false);
+			hairStyles[2].SetActive(false);
 		}else if(value == 1){
+			hairStyles[0].SetActive(false);
 			hairStyles[1].SetActive(true);
+			hairStyles[2].SetActive(false);
 		}else if(value == 2){
+			hairStyles[0].SetActive(false);
+			hairStyles[1].SetActive(false);
 			hairStyles[2].SetActive(true);
 		}
 	}
