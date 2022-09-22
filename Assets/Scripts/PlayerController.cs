@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using Mirror;
 
 [RequireComponent(typeof(CharacterController))]
@@ -9,7 +8,7 @@ public class PlayerController: NetworkBehaviour{
 	[Header("References")]
 	public float walkingSpeed = 7.5f;
 	[SerializeField] float runningSpeed = 11.5f;
-//	[SerializeField] float jumpHeight = 3.0f;
+	//[SerializeField] float jumpHeight = 3.0f;
 	[SerializeField] float gravity = 20.0f;
 	[SerializeField] Camera FirstPersonCamera;
 	[SerializeField] Camera ThirdPersonCamera;
@@ -20,8 +19,10 @@ public class PlayerController: NetworkBehaviour{
 	
 	//My variables & references
 	[Space(10)]
+	[SerializeField] GameObject groundCheck;
 	Camera workingCamera;
 	Animator animator;
+	bool isGrounded;
 	bool isFat;
 	bool isLocked;
 	
@@ -31,8 +32,7 @@ public class PlayerController: NetworkBehaviour{
 		TopCamera,
 		BotCamera
 	};
-	
-	[SerializeField] CameraState myCamera;
+	CameraState myCamera;
 	
 	//Fly variables
 	[Space(20)]
@@ -79,6 +79,7 @@ public class PlayerController: NetworkBehaviour{
 	
 	void Update(){
 		if(!isLocalPlayer) return;
+		isGrounded = Physics.CheckSphere(groundCheck.transform.position, 0.2f, groundLayer);
 		
 		KeyInputs();
 		Fly();
@@ -140,6 +141,10 @@ public class PlayerController: NetworkBehaviour{
 		if(Input.GetKeyDown(KeyCode.F)){
 			CmdResize();
 		}
+		if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
+			moveDirection.y = 100;
+			Debug.Log("Jump");
+		}
 		
 		//Temporary cursor Lock/Unlock for testing
 		if(Input.GetKeyDown(KeyCode.Escape)){
@@ -152,11 +157,6 @@ public class PlayerController: NetworkBehaviour{
 				Cursor.visible = false;
 				isLocked = true;
 			}
-		}
-		if(!isLocked && Input.GetMouseButtonDown(1)){
-			Cursor.lockState = CursorLockMode.Locked;
-			Cursor.visible = false;
-			isLocked = true;
 		}
 	}
 	
