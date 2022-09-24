@@ -32,7 +32,7 @@ public class PlayerController: NetworkBehaviour{
 		TopCamera,
 		BotCamera
 	};
-	CameraState myCamera;
+	public CameraState myCamera;
 	
 	//Fly variables
 	[Space(20)]
@@ -146,17 +146,16 @@ public class PlayerController: NetworkBehaviour{
 			Debug.Log("Jump");
 		}
 		
-		//Temporary cursor Lock/Unlock for testing
-		if(Input.GetKeyDown(KeyCode.Escape)){
-			if(isLocked){
-				Cursor.lockState = CursorLockMode.None;
-				Cursor.visible = true;
-				isLocked = false;
-			}else{
-				Cursor.lockState = CursorLockMode.Locked;
-				Cursor.visible = false;
-				isLocked = true;
-			}
+		if(Input.GetMouseButtonDown(0) && PlayerCanvasScript.canClick == false){
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			isLocked = true;
+		}
+		
+		if(Input.GetKeyDown(KeyCode.Escape) && isLocked){
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+			isLocked = false;
 		}
 	}
 	
@@ -199,7 +198,7 @@ public class PlayerController: NetworkBehaviour{
 		}
 	}
 	
-	void CammeraChange(){
+	public void CammeraChange(){
 		if (myCamera == CameraState.FirstPersonCamera){
 			myCamera = CameraState.ThirdPesonCamera;
 			workingCamera = ThirdPersonCamera;
@@ -208,42 +207,53 @@ public class PlayerController: NetworkBehaviour{
 			TopCamera.gameObject.SetActive(false);
 			BotCamera.gameObject.SetActive(false);
 			lookXLimit = 40f;
+			
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			isLocked = true;
+			canMove = true;
 		}
 		else if (myCamera == CameraState.ThirdPesonCamera){
-			myCamera = CameraState.TopCamera;
-			canMove = false;
+			myCamera = CameraState.FirstPersonCamera;
 			workingCamera = FirstPersonCamera;
-			FirstPersonCamera.gameObject.SetActive(false);
+			FirstPersonCamera.gameObject.SetActive(true);
 			ThirdPersonCamera.gameObject.SetActive(false);
-			TopCamera.gameObject.SetActive(true);
+			TopCamera.gameObject.SetActive(false);
 			BotCamera.gameObject.SetActive(false);
 			lookXLimit = 90f;
 			
-			Cursor.lockState = CursorLockMode.None;
-			Cursor.visible = true;
-			isLocked = false;
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			isLocked = true;
+			canMove = true;
 		}
-		else if (myCamera == CameraState.TopCamera){
+	}
+	
+	public void CustomizationCamera(){
+		if (myCamera == CameraState.TopCamera){
 			myCamera = CameraState.BotCamera;
-			canMove = false;
 			workingCamera = FirstPersonCamera;
 			FirstPersonCamera.gameObject.SetActive(false);
 			ThirdPersonCamera.gameObject.SetActive(false);
 			TopCamera.gameObject.SetActive(false);
 			BotCamera.gameObject.SetActive(true);
 			
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+			isLocked = false;
+			canMove = false;
 		}else if (myCamera == CameraState.BotCamera){
-			myCamera = CameraState.FirstPersonCamera;
-			canMove = true;
+			myCamera = CameraState.TopCamera;
 			workingCamera = FirstPersonCamera;
-			FirstPersonCamera.gameObject.SetActive(true);
+			FirstPersonCamera.gameObject.SetActive(false);
 			ThirdPersonCamera.gameObject.SetActive(false);
-			TopCamera.gameObject.SetActive(false);
+			TopCamera.gameObject.SetActive(true);
 			BotCamera.gameObject.SetActive(false);
 			
-			Cursor.lockState = CursorLockMode.Locked;
-			Cursor.visible = false;
-			isLocked = true;
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+			isLocked = false;
+			canMove = false;
 		}
 	}
 	
