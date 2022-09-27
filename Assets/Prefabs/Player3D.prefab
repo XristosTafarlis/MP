@@ -14007,19 +14007,20 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   walkingSpeed: 5
-  runningSpeed: 9
-  gravity: 20
+  runningSpeed: 10
+  gravity: 9.81
+  jumpSpeed: 3.75
   FirstPersonCamera: {fileID: 3802563447830485347}
   ThirdPersonCamera: {fileID: 5846164351989504602}
   TopCamera: {fileID: 4263720617364902302}
   BotCamera: {fileID: 384002433958511880}
   lookSpeed: 2
+  canMove: 1
   groundCheck: {fileID: 5220515842321112378}
   myCamera: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  canMove: 1
 --- !u!114 &4294051283591015424
 MonoBehaviour:
   m_ObjectHideFlags: 0

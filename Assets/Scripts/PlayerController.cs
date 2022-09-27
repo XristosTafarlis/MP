@@ -8,13 +8,14 @@ public class PlayerController: NetworkBehaviour{
 	[Header("References")]
 	public float walkingSpeed = 7.5f;
 	[SerializeField] float runningSpeed = 11.5f;
-	//[SerializeField] float jumpHeight = 3.0f;
 	[SerializeField] float gravity = 20.0f;
+	[SerializeField] float jumpSpeed = 8.0f;
 	[SerializeField] Camera FirstPersonCamera;
 	[SerializeField] Camera ThirdPersonCamera;
 	[SerializeField] Camera TopCamera;
 	[SerializeField] Camera BotCamera;
 	[SerializeField] float lookSpeed = 2.0f;
+	[HideInInspector] public bool canMove = true;
 	float lookXLimit = 90.0f;
 	
 	//My variables & references
@@ -22,9 +23,8 @@ public class PlayerController: NetworkBehaviour{
 	[SerializeField] GameObject groundCheck;
 	Camera workingCamera;
 	Animator animator;
-	bool isGrounded;
+	bool onGround;
 	bool isFat;
-	bool isLocked;
 	
 	public enum CameraState{
 		FirstPersonCamera,
@@ -51,7 +51,6 @@ public class PlayerController: NetworkBehaviour{
 	Vector3 moveDirection = Vector3.zero;
 	float rotationX = 0;
 	
-	[HideInInspector] public bool canMove = true;
 	
 	void Start(){
 		characterController = GetComponent<CharacterController>();
@@ -60,7 +59,6 @@ public class PlayerController: NetworkBehaviour{
 		
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		isLocked = true;
 		
 		if(!isLocalPlayer){
 			FirstPersonCamera.gameObject.SetActive(false);
@@ -79,7 +77,6 @@ public class PlayerController: NetworkBehaviour{
 	
 	void Update(){
 		if(!isLocalPlayer) return;
-		isGrounded = Physics.CheckSphere(groundCheck.transform.position, 0.2f, groundLayer);
 		
 		KeyInputs();
 		Fly();
@@ -92,6 +89,8 @@ public class PlayerController: NetworkBehaviour{
 			// We are grounded, so recalculate move direction based on axes
 			Vector3 forward = transform.TransformDirection(Vector3.forward);
 			Vector3 right = transform.TransformDirection(Vector3.right);
+			float movementDirectionY = moveDirection.y;
+			onGround = Physics.CheckSphere(groundCheck.transform.position, 0.2f, groundLayer);
 			
 			// Press Left Shift to run
 			bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -108,6 +107,18 @@ public class PlayerController: NetworkBehaviour{
 			moveDirection = (forward * axisX) + (right * axisY);
 			moveDirection.Normalize();
 			
+			if (Input.GetButton("Jump") && canMove && characterController.isGrounded){
+				moveDirection.y = jumpSpeed;
+				GetComponent<Animator>().SetBool("IsJumping", true);
+			}
+			else{
+				moveDirection.y = movementDirectionY;
+			}
+			
+			if (moveDirection.y < -3f){
+				GetComponent<Animator>().SetBool("IsJumping", false);
+			}
+			
 			// Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
 			// when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
 			// as an acceleration (ms^-2)
@@ -123,7 +134,7 @@ public class PlayerController: NetworkBehaviour{
 		}
 		
 		// Player and Camera rotation
-		if (canMove && isLocked){
+		if (canMove && Cursor.lockState == CursorLockMode.Locked){
 			rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
 			rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
 			workingCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
@@ -141,21 +152,15 @@ public class PlayerController: NetworkBehaviour{
 		if(Input.GetKeyDown(KeyCode.F)){
 			CmdResize();
 		}
-		if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
-			moveDirection.y = 100;
-			Debug.Log("Jump");
-		}
 		
 		if(Input.GetMouseButtonDown(0) && PlayerCanvasScript.canClick == false){
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
-			isLocked = true;
 		}
 		
-		if(Input.GetKeyDown(KeyCode.Escape) && isLocked){
+		if(Input.GetKeyDown(KeyCode.Escape) && Cursor.lockState == CursorLockMode.Locked){
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
-			isLocked = false;
 		}
 	}
 	
@@ -166,6 +171,7 @@ public class PlayerController: NetworkBehaviour{
 			_goalPosition = new Vector3(transform.position.x, transform.position.y + 10f, transform.position.z);
 			_target = 1;
 			isFlying = true;
+			GetComponent<Animator>().SetBool("IsFlying", true);
 			Invoke("SetFlyVariables", 1f);
 		}else if (isFlying && _current == 1){
 			characterController.enabled = false;
@@ -210,7 +216,6 @@ public class PlayerController: NetworkBehaviour{
 			
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
-			isLocked = true;
 			canMove = true;
 		}
 		else if (myCamera == CameraState.ThirdPesonCamera){
@@ -224,7 +229,6 @@ public class PlayerController: NetworkBehaviour{
 			
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
-			isLocked = true;
 			canMove = true;
 		}
 	}
@@ -240,7 +244,6 @@ public class PlayerController: NetworkBehaviour{
 			
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
-			isLocked = false;
 			canMove = false;
 		}else if (myCamera == CameraState.BotCamera){
 			myCamera = CameraState.TopCamera;
@@ -252,7 +255,6 @@ public class PlayerController: NetworkBehaviour{
 			
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
-			isLocked = false;
 			canMove = false;
 		}
 	}
