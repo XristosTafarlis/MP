@@ -3,10 +3,9 @@ using UnityEngine.UI;
 
 public class PlayerCanvasScript : MonoBehaviour{
 	
-	bool isHiden = true;
-	public static bool isInCustomization;
-	public static bool canClick;
-	[SerializeField] bool ShowCanClick;
+	bool isHiden = true; //Is the menu hidden
+	public static bool isInCustomization; //The player is in the customization menu
+	public static bool canClick;	//The player is able to click
 	[SerializeField] Image customizationButtonSprite;
 	[SerializeField] GameObject customizationObjects;
 	
@@ -18,7 +17,6 @@ public class PlayerCanvasScript : MonoBehaviour{
 	void Update(){
 		if(!isHiden) canClick = true;
 		
-		ShowCanClick = canClick;
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			if(!isHiden){
 				isHiden = true;

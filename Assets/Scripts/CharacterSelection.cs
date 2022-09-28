@@ -69,29 +69,31 @@ public class CharacterSelection : NetworkBehaviour{
 	void Update(){
 		if(!isLocalPlayer) return;
 		//Testing with buttons 1, 2 and 3
-		if(Input.GetKeyDown(KeyCode.Alpha1)){
-			CMDChangeHairStyle(0);
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha2)){
-			CMDChangeHairStyle(1);
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha3)){
-			CMDChangeHairStyle(2);
-		}
+		//if(Input.GetKeyDown(KeyCode.Alpha1)){
+		//	CMDChangeHairStyle(0);
+		//}
+		//if(Input.GetKeyDown(KeyCode.Alpha2)){
+		//	CMDChangeHairStyle(1);
+		//}
+		//if(Input.GetKeyDown(KeyCode.Alpha3)){
+		//	CMDChangeHairStyle(2);
+		//}
 	}
 	
 	#region Hair
+	//public void ChangeHairStyle(int value){
+	//	CMDChangeHairStyle(value);
+	//}
+	//
+	//[Command]
+	//void CMDChangeHairStyle(int value){
+	//	RPCChangeHairStyel(value);
+	//}
+	//
+	//[ClientRpc]
+	//void RPCChangeHairStyel(int value){ changed name to "public void ChangeHairStyle(int value){" right bellow
+	
 	public void ChangeHairStyle(int value){
-		CMDChangeHairStyle(value);
-	}
-	
-	[Command]
-	void CMDChangeHairStyle(int value){
-		RPCChangeHairStyel(value);
-	}
-	
-	[ClientRpc]
-	void RPCChangeHairStyel(int value){
 		//if(!isLocalPlayer) return;
 		if(value == 0){
 			hairStyles[0].SetActive(true);
@@ -420,5 +422,4 @@ public class CharacterSelection : NetworkBehaviour{
 		}
 	}
 	#endregion
-	
 }

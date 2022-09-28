@@ -4,8 +4,8 @@ using Mirror;
 public class WalkAnimationsController : NetworkBehaviour{
 	
 	CharacterController characterController;
-	Animator animator;
 	PlayerController playerController;
+	Animator animator;
 	
 	float vel_X = 0f;
 	float vel_Z = 0f;

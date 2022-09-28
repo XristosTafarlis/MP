@@ -4,29 +4,27 @@ using Mirror;
 [RequireComponent(typeof(CharacterController))]
 
 public class PlayerController: NetworkBehaviour{
-	//Player Controller variables & references
 	[Header("References")]
-	public float walkingSpeed = 7.5f;
-	[SerializeField] float runningSpeed = 11.5f;
-	[SerializeField] float gravity = 20.0f;
-	[SerializeField] float jumpSpeed = 8.0f;
-	[SerializeField] Camera FirstPersonCamera;
-	[SerializeField] Camera ThirdPersonCamera;
-	[SerializeField] Camera TopCamera;
-	[SerializeField] Camera BotCamera;
-	[SerializeField] float lookSpeed = 2.0f;
-	[HideInInspector] public bool canMove = true;
-	float lookXLimit = 90.0f;
+	public float walkingSpeed = 7.5f;	//Is public because is needed in CharacterSelection.cs
+	[SerializeField] float runningSpeed = 11.5f;	//Default running speed
+	[SerializeField] float gravity = 20.0f;	//Default gravity
+	[SerializeField] float jumpSpeed = 8.0f;	//Default jump multiplayer
+	[SerializeField] float lookSpeed = 2.0f;	//Default look sensitivity
+	[HideInInspector] public bool canMove = true;	//Boolean that can be used to stop the player from moving
 	
-	//My variables & references
-	[Space(10)]
-	[SerializeField] GameObject groundCheck;
-	Camera workingCamera;
-	Animator animator;
-	bool onGround;
-	bool isFat;
+	[Header("Cameras")]
+	[SerializeField] Camera FirstPersonCamera;	//Reference to the first person cammera
+	[SerializeField] Camera ThirdPersonCamera;	//Reference to the third person cammera
+	[SerializeField] Camera TopCamera;	//Reference to the camera that look the top part when in customization
+	[SerializeField] Camera BotCamera;	//Reference to the camera that look the bottom part when in customization
+	float lookXLimit = 90.0f;	//Maximum angle the player can look up and down
 	
-	public enum CameraState{
+	CharacterController characterController;	//Character Controller component
+	Animator animator;	//Animator component
+	Camera workingCamera;	//Used to keep track of what camera is being used
+	bool isFat;	//That was a temporary variable to test multiplayer behavior
+	
+	public enum CameraState{	//Camera state, controls which camera is being used
 		FirstPersonCamera,
 		ThirdPesonCamera,
 		TopCamera,
@@ -35,22 +33,19 @@ public class PlayerController: NetworkBehaviour{
 	public CameraState myCamera;
 	
 	//Fly variables
-	[Space(20)]
-	float _current;
-	float _target;
+	float currentPointBetween0and1;
+	float targetPoint;
 	float tempGravity;
 	bool isFlying;
 	Vector3 _goalPosition;
 	Vector3 _startPosition;
 	[SerializeField] LayerMask groundLayer;
 	
-	[SyncVar(hook = "OnSizeChange")]
+	[SyncVar(hook = "OnSizeChange")]	//Temporary variable to check network functionality
 	Vector3 SV_size;
 	
-	CharacterController characterController;
 	Vector3 moveDirection = Vector3.zero;
 	float rotationX = 0;
-	
 	
 	void Start(){
 		characterController = GetComponent<CharacterController>();
@@ -90,7 +85,6 @@ public class PlayerController: NetworkBehaviour{
 			Vector3 forward = transform.TransformDirection(Vector3.forward);
 			Vector3 right = transform.TransformDirection(Vector3.right);
 			float movementDirectionY = moveDirection.y;
-			onGround = Physics.CheckSphere(groundCheck.transform.position, 0.2f, groundLayer);
 			
 			// Press Left Shift to run
 			bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -107,16 +101,12 @@ public class PlayerController: NetworkBehaviour{
 			moveDirection = (forward * axisX) + (right * axisY);
 			moveDirection.Normalize();
 			
-			if (Input.GetButton("Jump") && canMove && characterController.isGrounded){
+			if (Input.GetButtonDown("Jump") && canMove && characterController.isGrounded){
 				moveDirection.y = jumpSpeed;
-				GetComponent<Animator>().SetBool("IsJumping", true);
+				GetComponent<Animator>().SetTrigger("Jump");
 			}
 			else{
 				moveDirection.y = movementDirectionY;
-			}
-			
-			if (moveDirection.y < -3f){
-				GetComponent<Animator>().SetBool("IsJumping", false);
 			}
 			
 			// Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
@@ -128,7 +118,7 @@ public class PlayerController: NetworkBehaviour{
 			
 			// Move the controller
 			if(isRunning)
-				characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+				characterController.Move(new Vector3(moveDirection.x * runningSpeed * Time.deltaTime, moveDirection.y * walkingSpeed * Time.deltaTime, moveDirection.z * runningSpeed * Time.deltaTime));
 			else
 				characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
 		}
@@ -165,21 +155,20 @@ public class PlayerController: NetworkBehaviour{
 	}
 	
 	void FlyInputs(){
-		if(!isFlying && _current == 0){
+		if(!isFlying && currentPointBetween0and1 == 0){
 			characterController.enabled = false;
 			_startPosition = transform.position;
 			_goalPosition = new Vector3(transform.position.x, transform.position.y + 10f, transform.position.z);
-			_target = 1;
+			targetPoint = 1;
 			isFlying = true;
 			GetComponent<Animator>().SetBool("IsFlying", true);
 			Invoke("SetFlyVariables", 1f);
-		}else if (isFlying && _current == 1){
+		}else if (isFlying && currentPointBetween0and1 == 1){
 			characterController.enabled = false;
 			//Raycast
 			CmdTransformPosition();
-			//_startPosition = new Vector3(transform.position.x, transform.position.y - 10f, transform.position.z);
 			_goalPosition = transform.position; //Need to be revesed, so this is actualy the starting position
-			_target = 0;
+			targetPoint = 0;
 			moveDirection.y = 0;
 			isFlying = false;
 			Invoke("SetFlyVariables", 1f);
@@ -187,8 +176,8 @@ public class PlayerController: NetworkBehaviour{
 	}
 	
 	void Fly(){
-		_current = Mathf.MoveTowards(_current, _target, Time.deltaTime);
-		transform.position = Vector3.Lerp(_startPosition, _goalPosition, _current);
+		currentPointBetween0and1 = Mathf.MoveTowards(currentPointBetween0and1, targetPoint, Time.deltaTime);
+		transform.position = Vector3.Lerp(_startPosition, _goalPosition, currentPointBetween0and1);
 	}
 	
 	void SetFlyVariables(){
@@ -196,7 +185,6 @@ public class PlayerController: NetworkBehaviour{
 			gravity = 0f;
 			moveDirection = Vector3.zero;
 			characterController.enabled = true;
-			GetComponent<Animator>().SetBool("IsFlying", true);
 		}else{
 			gravity = tempGravity;
 			characterController.enabled = true;
@@ -259,10 +247,6 @@ public class PlayerController: NetworkBehaviour{
 		}
 	}
 	
-	void OnSizeChange(Vector3 Old, Vector3 New){
-		transform.localScale = New;
-	}
-	
 	[Command]
 	void CmdTransformPosition(){
 		RpcCastLine();
@@ -272,8 +256,12 @@ public class PlayerController: NetworkBehaviour{
 	void RpcCastLine(){
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
-			_startPosition = hit.point /*+ new Vector3(0f, 1f, 0f)*/;
+			_startPosition = hit.point;
 		}
+	}
+	
+	void OnSizeChange(Vector3 Old, Vector3 New){
+		transform.localScale = New;
 	}
 	
 	[Command]

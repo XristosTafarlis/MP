@@ -50,7 +50,7 @@ public class FlyAnimationController : NetworkBehaviour{
 			vel_X -= Time.deltaTime * deceleration;
 		}
 		
-		animator.SetFloat("FlyX", vel_X);
-		animator.SetFloat("FlyZ", vel_Z);
+		animator.SetFloat("FlyX", vel_X, 0.1f, Time.deltaTime);
+		animator.SetFloat("FlyZ", vel_Z, 0.1f, Time.deltaTime);
 	}
 }
