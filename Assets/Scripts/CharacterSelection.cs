@@ -42,6 +42,24 @@ public class CharacterSelection : NetworkBehaviour{
 	SkinnedMeshRenderer businessStyleSkinnedMeshRenderer;
 	SkinnedMeshRenderer casualStyleSkinnedMeshRenderer;
 	
+	[Header("Suit")]
+	[SerializeField] GameObject [] suitStyles;
+	//For Tie and Bow Tie materials we use the same as the Tie and Bowtie materials above
+	SkinnedMeshRenderer suitStyle1SkinnedMeshRenderer;
+	SkinnedMeshRenderer suitStyle2SkinnedMeshRenderer;
+	
+	enum ShirtColor{ //We use this enum to keep track of the shirt's color. We need the shirt's color when we add a vest.
+		Black,
+		Blue,
+		Gray,
+		Green,
+		Pink,
+		Red,
+		White,
+		Yellow
+	}
+	ShirtColor myShirtColor = ShirtColor.Black;
+	
 	void Start(){
 		if(!isLocalPlayer) return;
 		//Hair
@@ -64,6 +82,10 @@ public class CharacterSelection : NetworkBehaviour{
 		//Shoes
 		businessStyleSkinnedMeshRenderer = shoesStyles[0].GetComponent<SkinnedMeshRenderer>();
 		casualStyleSkinnedMeshRenderer = shoesStyles[1].GetComponent<SkinnedMeshRenderer>();
+		
+		//Suits
+		suitStyle1SkinnedMeshRenderer = suitStyles[0].GetComponent<SkinnedMeshRenderer>();
+		suitStyle2SkinnedMeshRenderer = suitStyles[1].GetComponent<SkinnedMeshRenderer>();
 	}
 	
 	void Update(){
@@ -91,7 +113,7 @@ public class CharacterSelection : NetworkBehaviour{
 	//}
 	//
 	//[ClientRpc]
-	//void RPCChangeHairStyel(int value){ changed name to "public void ChangeHairStyle(int value){" right bellow
+	//void RPCChangeHairStyel(int value){ /*changed name to "public void ChangeHairStyle(int value){" right bellow*/
 	
 	public void ChangeHairStyle(int value){
 		//if(!isLocalPlayer) return;
@@ -245,51 +267,89 @@ public class CharacterSelection : NetworkBehaviour{
 		Material [] materials2 = shirtAndPantStyle2SkinnedMeshRenderer.materials;
 		Material [] materials3 = shirtAndPantStyle3SkinnedMeshRenderer.materials;
 		Material [] materials4 = shirtAndPantStyle4SkinnedMeshRenderer.materials;
+		
+		Material [] materialSuit1 = suitStyle1SkinnedMeshRenderer.materials;
+		Material [] materialSuit2 = suitStyle2SkinnedMeshRenderer.materials;
 		if(value == 0){
 			materials1[0] = shirtMaterials[0];
 			materials2[0] = shirtMaterials[0];
 			materials3[0] = shirtMaterials[0];
 			materials4[0] = shirtMaterials[0];
+			
+			materialSuit1[1] = shirtMaterials[0];//No idea why in Inspector is the 1nd material but here i have to get the 2rd (0,[1])
+			materialSuit2[1] = shirtMaterials[0];
+			myShirtColor = ShirtColor.Black;
 		}else if(value == 1){
 			materials1[0] = shirtMaterials[1];
 			materials2[0] = shirtMaterials[1];
 			materials3[0] = shirtMaterials[1];
 			materials4[0] = shirtMaterials[1];
+			
+			materialSuit1[1] = shirtMaterials[1];
+			materialSuit2[1] = shirtMaterials[1];
+			myShirtColor = ShirtColor.Blue;
 		}else if(value == 2){
 			materials1[0] = shirtMaterials[2];
 			materials2[0] = shirtMaterials[2];
 			materials3[0] = shirtMaterials[2];
 			materials4[0] = shirtMaterials[2];
+			
+			materialSuit1[1] = shirtMaterials[2];
+			materialSuit2[1] = shirtMaterials[2];
+			myShirtColor = ShirtColor.Gray;
 		}else if(value == 3){
 			materials1[0] = shirtMaterials[3];
 			materials2[0] = shirtMaterials[3];
 			materials3[0] = shirtMaterials[3];
 			materials4[0] = shirtMaterials[3];
+			
+			materialSuit1[1] = shirtMaterials[3];
+			materialSuit2[1] = shirtMaterials[3];
+			myShirtColor = ShirtColor.Green;
 		}else if(value == 4){
 			materials1[0] = shirtMaterials[4];
 			materials2[0] = shirtMaterials[4];
 			materials3[0] = shirtMaterials[4];
 			materials4[0] = shirtMaterials[4];
+			
+			materialSuit1[1] = shirtMaterials[4];
+			materialSuit2[1] = shirtMaterials[4];
+			myShirtColor = ShirtColor.Pink;
 		}else if(value == 5){
 			materials1[0] = shirtMaterials[5];
 			materials2[0] = shirtMaterials[5];
 			materials3[0] = shirtMaterials[5];
 			materials4[0] = shirtMaterials[5];
+			
+			materialSuit1[1] = shirtMaterials[5];
+			materialSuit2[1] = shirtMaterials[5];
+			myShirtColor = ShirtColor.Red;
 		}else if(value == 6){
 			materials1[0] = shirtMaterials[6];
 			materials2[0] = shirtMaterials[6];
 			materials3[0] = shirtMaterials[6];
 			materials4[0] = shirtMaterials[6];
+			
+			materialSuit1[1] = shirtMaterials[6];
+			materialSuit2[1] = shirtMaterials[6];
+			myShirtColor = ShirtColor.White;
 		}else if(value == 7){
 			materials1[0] = shirtMaterials[7];
 			materials2[0] = shirtMaterials[7];
 			materials3[0] = shirtMaterials[7];
 			materials4[0] = shirtMaterials[7];
+			
+			materialSuit1[1] = shirtMaterials[7];
+			materialSuit2[1] = shirtMaterials[7];
+			myShirtColor = ShirtColor.Yellow;
 		}
 		shirtAndPantStyle1SkinnedMeshRenderer.materials = materials1;
 		shirtAndPantStyle2SkinnedMeshRenderer.materials = materials2;
 		shirtAndPantStyle3SkinnedMeshRenderer.materials = materials3;
 		shirtAndPantStyle4SkinnedMeshRenderer.materials = materials4;
+		
+		suitStyle1SkinnedMeshRenderer.materials = materialSuit1;
+		suitStyle2SkinnedMeshRenderer.materials = materialSuit2;
 	}
 	
 	public void ChangePantsColor(int value){
@@ -297,94 +357,136 @@ public class CharacterSelection : NetworkBehaviour{
 		Material [] materials2 = shirtAndPantStyle2SkinnedMeshRenderer.materials;
 		Material [] materials3 = shirtAndPantStyle3SkinnedMeshRenderer.materials;
 		Material [] materials4 = shirtAndPantStyle4SkinnedMeshRenderer.materials;
+		
+		Material [] materialSuit1 = suitStyle1SkinnedMeshRenderer.materials;
 		if(value == 0){
 			materials1[1] = pantsMaterials[0];
 			materials2[1] = pantsMaterials[0];
 			materials3[1] = pantsMaterials[0];
 			materials4[1] = pantsMaterials[0];
+			
+			materialSuit1[0] = pantsMaterials[0];//No idea why in Inspector is the 2nd material but here i have to get the 1st ([0])
 		}else if(value == 1){
 			materials1[1] = pantsMaterials[1];
 			materials2[1] = pantsMaterials[1];
 			materials3[1] = pantsMaterials[1];
 			materials4[1] = pantsMaterials[1];
+			
+			materialSuit1[0] = pantsMaterials[1];
 		}else if(value == 2){
 			materials1[1] = pantsMaterials[2];
 			materials2[1] = pantsMaterials[2];
 			materials3[1] = pantsMaterials[2];
 			materials4[1] = pantsMaterials[2];
+			
+			materialSuit1[0] = pantsMaterials[2];
 		}else if(value == 3){
 			materials1[1] = pantsMaterials[3];
 			materials2[1] = pantsMaterials[3];
 			materials3[1] = pantsMaterials[3];
 			materials4[1] = pantsMaterials[3];
+			
+			materialSuit1[0] = pantsMaterials[3];
 		}else if(value == 4){
 			materials1[1] = pantsMaterials[4];
 			materials2[1] = pantsMaterials[4];
 			materials3[1] = pantsMaterials[4];
 			materials4[1] = pantsMaterials[4];
+			
+			materialSuit1[0] = pantsMaterials[4];
 		}
 		shirtAndPantStyle1SkinnedMeshRenderer.materials = materials1;
 		shirtAndPantStyle2SkinnedMeshRenderer.materials = materials2;
 		shirtAndPantStyle3SkinnedMeshRenderer.materials = materials3;
 		shirtAndPantStyle4SkinnedMeshRenderer.materials = materials4;
+		
+		suitStyle1SkinnedMeshRenderer.materials = materialSuit1;
 	}
 	
 	public void ChangeTieBowtieColor(int value){
 		Material [] materials2 = shirtAndPantStyle2SkinnedMeshRenderer.materials;
 		Material [] materials3 = shirtAndPantStyle3SkinnedMeshRenderer.materials;
 		Material [] materials4 = shirtAndPantStyle4SkinnedMeshRenderer.materials;
+		
+		Material [] materialSuit1 = suitStyle1SkinnedMeshRenderer.materials;
 		if(value == 0){
 			materials2[2] = tieBowtieGlassesMaterials[0];
 			materials3[2] = tieBowtieGlassesMaterials[0];
 			materials4[2] = tieBowtieGlassesMaterials[0];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[0];
 		}else if(value == 1){
 			materials2[2] = tieBowtieGlassesMaterials[1];
 			materials3[2] = tieBowtieGlassesMaterials[1];
 			materials4[2] = tieBowtieGlassesMaterials[1];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[1];
 		}else if(value == 2){
 			materials2[2] = tieBowtieGlassesMaterials[2];
 			materials3[2] = tieBowtieGlassesMaterials[2];
 			materials4[2] = tieBowtieGlassesMaterials[2];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[2];
 		}else if(value == 3){
 			materials2[2] = tieBowtieGlassesMaterials[3];
 			materials3[2] = tieBowtieGlassesMaterials[3];
 			materials4[2] = tieBowtieGlassesMaterials[3];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[3];
 		}else if(value == 4){
 			materials2[2] = tieBowtieGlassesMaterials[4];
 			materials3[2] = tieBowtieGlassesMaterials[4];
 			materials4[2] = tieBowtieGlassesMaterials[4];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[4];
 		}else if(value == 5){
 			materials2[2] = tieBowtieGlassesMaterials[5];
 			materials3[2] = tieBowtieGlassesMaterials[5];
 			materials4[2] = tieBowtieGlassesMaterials[5];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[5];
 		}else if(value == 6){
 			materials2[2] = tieBowtieGlassesMaterials[6];
 			materials3[2] = tieBowtieGlassesMaterials[6];
 			materials4[2] = tieBowtieGlassesMaterials[6];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[6];
 		}else if(value == 7){
 			materials2[2] = tieBowtieGlassesMaterials[7];
 			materials3[2] = tieBowtieGlassesMaterials[7];
 			materials4[2] = tieBowtieGlassesMaterials[7];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[7];
 		}else if(value == 8){
 			materials2[2] = tieBowtieGlassesMaterials[8];
 			materials3[2] = tieBowtieGlassesMaterials[8];
 			materials4[2] = tieBowtieGlassesMaterials[8];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[8];
 		}else if(value == 9){
 			materials2[2] = tieBowtieGlassesMaterials[9];
 			materials3[2] = tieBowtieGlassesMaterials[9];
 			materials4[2] = tieBowtieGlassesMaterials[9];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[9];
 		}else if(value == 10){
 			materials2[2] = tieBowtieGlassesMaterials[10];
 			materials3[2] = tieBowtieGlassesMaterials[10];
 			materials4[2] = tieBowtieGlassesMaterials[10];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[10];
 		}else if(value == 11){
 			materials2[2] = tieBowtieGlassesMaterials[11];
 			materials3[2] = tieBowtieGlassesMaterials[11];
 			materials4[2] = tieBowtieGlassesMaterials[11];
+			
+			materialSuit1[2] = tieBowtieGlassesMaterials[11];
 		}
 		shirtAndPantStyle2SkinnedMeshRenderer.materials = materials2;
 		shirtAndPantStyle3SkinnedMeshRenderer.materials = materials3;
 		shirtAndPantStyle4SkinnedMeshRenderer.materials = materials4;
+		
+		suitStyle1SkinnedMeshRenderer.materials = materialSuit1;
 	}
 	#endregion
 	
@@ -419,6 +521,37 @@ public class CharacterSelection : NetworkBehaviour{
 			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[2];
 		}else if(value == 3){
 			casualStyleSkinnedMeshRenderer.material = casualShoesMaterials[3];
+		}
+	}
+	#endregion
+	
+	#region Suits
+	public void ChangeSuitStyle(int value){
+		//Disable normal shirt and pants
+		foreach (GameObject model in shirtAndPantStyles){
+			model.SetActive(false);
+		}
+		//Disable every suit style
+		foreach (GameObject model in suitStyles){
+			model.SetActive(false);
+		}
+		//Select suit style
+		if(value == 0){
+			suitStyles[0].SetActive(true);
+		}else if(value == 1){
+			suitStyles[1].SetActive(true);
+		}else if(value == 2){
+			suitStyles[2].SetActive(true);
+		}else if(value == 3){
+			suitStyles[3].SetActive(true);
+		}else if(value == 4){
+			suitStyles[4].SetActive(true);
+		}else if(value == 5){
+			suitStyles[5].SetActive(true);
+		}else if(value == 6){
+			suitStyles[6].SetActive(true);
+		}else if(value == 7){
+			suitStyles[7].SetActive(true);
 		}
 	}
 	#endregion
