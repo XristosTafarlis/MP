@@ -1,1 +1,1 @@
-# MultyPlayer
+# MultiPlayer
