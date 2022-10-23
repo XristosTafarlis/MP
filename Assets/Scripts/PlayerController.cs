@@ -1,9 +1,9 @@
 using UnityEngine;
-using Mirror;
+//using Mirror;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayerController: NetworkBehaviour{
+public class PlayerController: MonoBehaviour{
 	[Header("References")]
 	public float walkingSpeed = 7.5f;	//Is public because is needed in CharacterSelection.cs
 	[SerializeField] float runningSpeed = 11.5f;	//Default running speed
@@ -41,7 +41,7 @@ public class PlayerController: NetworkBehaviour{
 	Vector3 _startPosition;
 	[SerializeField] LayerMask groundLayer;
 	
-	[SyncVar(hook = "OnSizeChange")]	//Temporary variable to check network functionality
+	//[SyncVar(hook = "OnSizeChange")]	//Temporary variable to check network functionality
 	Vector3 SV_size;
 	
 	Vector3 moveDirection = Vector3.zero;
@@ -55,23 +55,29 @@ public class PlayerController: NetworkBehaviour{
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		
-		if(!isLocalPlayer){
-			FirstPersonCamera.gameObject.SetActive(false);
-			ThirdPersonCamera.gameObject.SetActive(false);
-			TopCamera.gameObject.SetActive(false);
-			BotCamera.gameObject.SetActive(false);
-		}else{
-			FirstPersonCamera.gameObject.SetActive(true);
-			ThirdPersonCamera.gameObject.SetActive(false);
-			TopCamera.gameObject.SetActive(false);
-			BotCamera.gameObject.SetActive(false);
-		}
+		//Modified for single player
+		FirstPersonCamera.gameObject.SetActive(true);
+		ThirdPersonCamera.gameObject.SetActive(false);
+		TopCamera.gameObject.SetActive(false);
+		BotCamera.gameObject.SetActive(false);
+		
+		//if(!isLocalPlayer){
+		//	FirstPersonCamera.gameObject.SetActive(false);
+		//	ThirdPersonCamera.gameObject.SetActive(false);
+		//	TopCamera.gameObject.SetActive(false);
+		//	BotCamera.gameObject.SetActive(false);
+		//}else{
+		//	FirstPersonCamera.gameObject.SetActive(true);
+		//	ThirdPersonCamera.gameObject.SetActive(false);
+		//	TopCamera.gameObject.SetActive(false);
+		//	BotCamera.gameObject.SetActive(false);
+		//}
 		myCamera = CameraState.FirstPersonCamera;
 		workingCamera = FirstPersonCamera;
 	}
 	
 	void Update(){
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		
 		KeyInputs();
 		Fly();
@@ -247,12 +253,12 @@ public class PlayerController: NetworkBehaviour{
 		}
 	}
 	
-	[Command]
+	//[Command]
 	void CmdTransformPosition(){
 		RpcCastLine();
 	}
 	
-	[TargetRpc]
+	//[TargetRpc]
 	void RpcCastLine(){
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.down, out hit, 20f, groundLayer)){
@@ -264,7 +270,7 @@ public class PlayerController: NetworkBehaviour{
 		transform.localScale = New;
 	}
 	
-	[Command]
+	//[Command]
 	void CmdResize(){
 		if(!isFat){
 			SV_size = new Vector3 (5, 5, 5);
@@ -276,7 +282,7 @@ public class PlayerController: NetworkBehaviour{
 		RpcChangeSize(SV_size);
 	}
 	
-	[ClientRpc]
+	//[ClientRpc]
 	void RpcChangeSize(Vector3 size){
 		transform.localScale = size;
 	}

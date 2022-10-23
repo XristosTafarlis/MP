@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
+//using Mirror;
 
-public class FlyAnimationController : NetworkBehaviour{
+public class FlyAnimationController : MonoBehaviour{
 	[SerializeField] float acceleration = 3f;
 	[SerializeField] float deceleration = 4f;
 	Animator animator;
 	float vel_X = 0f;
 	float vel_Z = 0f;
 	void Start(){
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		animator = GetComponent<Animator>();
 	}
 
 	void Update(){
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 
 		bool forwardPressed = Input.GetKey("w");
 		bool leftPressed = Input.GetKey("a");

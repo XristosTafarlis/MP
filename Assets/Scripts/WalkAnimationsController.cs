@@ -1,7 +1,7 @@
 using UnityEngine;
-using Mirror;
+//using Mirror;
 
-public class WalkAnimationsController : NetworkBehaviour{
+public class WalkAnimationsController : MonoBehaviour{
 	
 	CharacterController characterController;
 	PlayerController playerController;
@@ -11,14 +11,14 @@ public class WalkAnimationsController : NetworkBehaviour{
 	float vel_Z = 0f;
 	
 	void Start() {
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		animator = GetComponent<Animator>();
 		characterController = GetComponent<CharacterController>();
 		playerController = GetComponent<PlayerController>();
 	}
 	
 	void Update() {
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		if(playerController.canMove == false){
 			animator.SetFloat("vel_X", 0, 1f, 0.1f);
 			animator.SetFloat("vel_Z", 0, 1f, 0.1f);

@@ -1,7 +1,7 @@
 using UnityEngine;
-using Mirror;
+//using Mirror;
 
-public class CharacterSelection : NetworkBehaviour{
+public class CharacterSelection : MonoBehaviour{
 	#region Declerations
 	[Header("Hair")]
 	[SerializeField] GameObject [] hairStyles;
@@ -92,24 +92,24 @@ public class CharacterSelection : NetworkBehaviour{
 	[SerializeField] GameObject jacketColorDropDown;
 	[SerializeField] GameObject vestColorDropDown;
 	
-	enum VestColor{
-		AsterFlowers,
-		Black,
-		Brown,
-		Coral,
-		Gray,
-		Houndstooth,
-		NavyStripe,
-		Red,
-		Tartan,
-		White
-	}
-	VestColor? myVestColor = null; //This is set to null by default because the player has no vest.
+	//enum VestColor{
+	//	AsterFlowers,
+	//	Black,
+	//	Brown,
+	//	Coral,
+	//	Gray,
+	//	Houndstooth,
+	//	NavyStripe,
+	//	Red,
+	//	Tartan,
+	//	White
+	//}
+	//VestColor? myVestColor = null; //This is set to null by default because the player has no vest.
 	//The above enum should be used in similar fashion like the myShirtColor enum in ChangeShirtColor(); function
 	#endregion
 	
 	void Start(){
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		//Hair
 		hairStyle1SkinnedMeshRenderer = hairStyles[0].GetComponent<SkinnedMeshRenderer>();
 		hairStyle2SkinnedMeshRenderer = hairStyles[1].GetComponent<SkinnedMeshRenderer>();
@@ -144,7 +144,7 @@ public class CharacterSelection : NetworkBehaviour{
 	}
 	
 	void Update(){
-		if(!isLocalPlayer) return;
+		//if(!isLocalPlayer) return;
 		//Testing with buttons 1, 2 and 3
 		//if(Input.GetKeyDown(KeyCode.Alpha1)){
 		//	CMDChangeHairStyle(0);
