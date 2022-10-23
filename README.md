@@ -2,7 +2,7 @@
 
 ### Overview [here](https://xristostafarlis.github.io/MP/Build/index.html)
 
-A prototype multi player game constructed with Mirror in Unity 3D for my internship.
+A prototype multiplayer game constructed with Mirror in Unity 3D for my internship.
 
 ## **Keybinds**
 - Movement 
@@ -15,3 +15,5 @@ A prototype multi player game constructed with Mirror in Unity 3D for my interns
   > Q
 - Change Size
   > F
+- Change Camera
+  > C
